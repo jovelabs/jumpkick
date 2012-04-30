@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "jumpkick"
   gem.require_paths = ["lib"]
   gem.version       = Jumpkick::VERSION
+
+  gem.add_dependency("chef", "~> 0.10.8")
+  gem.add_dependency("fog", ">= 0")
 end
