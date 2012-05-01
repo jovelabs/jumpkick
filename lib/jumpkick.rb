@@ -1,5 +1,5 @@
 require "jumpkick/version"
 
-module Jumpkick
+class Jumpkick
   # Your code goes here...
 end

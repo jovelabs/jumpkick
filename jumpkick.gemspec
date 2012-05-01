@@ -17,4 +17,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency("chef", "~> 0.10.8")
   gem.add_dependency("fog", ">= 0")
+  gem.add_dependency("mixlib-cli", ">= 0")
 end
