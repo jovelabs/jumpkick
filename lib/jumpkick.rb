@@ -1,5 +1,3 @@
 require "jumpkick/version"
-
-module Jumpkick
-  # Your code goes here...
-end
+require "jumpkick/log"
+require "jumpkick/config"
