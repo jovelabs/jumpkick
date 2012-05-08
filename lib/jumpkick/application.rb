@@ -2,7 +2,9 @@ require "jumpkick/logger"
 
 class Jumpkick::Application
 
-  def initalize
+  def initialize
+    super
+
     @logger = Jumpkick::Logger.new(STDOUT)
   end
 
