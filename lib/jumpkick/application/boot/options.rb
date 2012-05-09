@@ -11,6 +11,7 @@ class Options
     options.address = nil
     options.template = File.join(File.dirname(__FILE__), "templates", "ubuntu-lucid.erb")
     options.user = "ubuntu"
+    options.identity = nil
     options.amqp_password = nil
     options.admin_password = nil
     options.hostname = nil
@@ -33,6 +34,10 @@ class Options
 
       opts.on("--user=USER", "Bootstrap user") do |user|
         options.user = user
+      end
+
+      opts.on("--identity=IDENTITY", "Bootstrap SSH identity") do |identity|
+        options.identity = identity
       end
 
       opts.on("--hostname=HOSTNAME", "URI for the Chef Server") do |hostname|

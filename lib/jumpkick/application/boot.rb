@@ -27,6 +27,7 @@ class Jumpkick::Application::Boot < Jumpkick::Application
     bootstrap.ui = ui
     bootstrap.name_args = [@options.address]
     bootstrap.config[:ssh_user] = @options.user
+    bootstrap.config[:identity_file] = @options.identity
     bootstrap.config[:use_sudo] = true
     bootstrap.config[:template_file] = @options.template
 
