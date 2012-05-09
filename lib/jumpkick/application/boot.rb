@@ -1,10 +1,14 @@
-
 require "jumpkick/application"
 require "jumpkick/application/boot/options"
 
-class Jumpkick::Application::Boot < Jumpkick::Application
+require "chef"
+require "chef/knife"
+require "chef/knife/bootstrap"
+require "chef/knife/core/bootstrap_context"
+require "chef/knife/ssh"
+require "net/ssh/multi"
 
-  VERSION = "0.0.1"
+class Jumpkick::Application::Boot < Jumpkick::Application
 
   def initialize
     @options = Options.parse(ARGV)
@@ -12,18 +16,21 @@ class Jumpkick::Application::Boot < Jumpkick::Application
     super
   end
 
-  def configure
-    super
-
-    @logger.info("Configuring...")
-  end
-
   def run
     super
+    @logger.debug(@options)
+    @logger.info("Preparing bootstrap for '#{@options.address}'.")
 
-    @logger.info("Hello World!")
 
-    puts @options
+    bootstrap = ::Chef::Knife::Bootstrap.new
+    ui = ::Chef::Knife::UI.new(STDOUT, STDERR, STDIN, bootstrap.config)
+    bootstrap.ui = ui
+    bootstrap.name_args = [@options.address]
+    bootstrap.config[:use_sudo] = true
+    bootstrap.config[:template_file] = @options.template
+
+    @logger.info("Running bootstrap for '#{@options.address}'.")
+    bootstrap.run
   end
 
 end

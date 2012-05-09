@@ -3,7 +3,8 @@ require "jumpkick/logger"
 class Jumpkick::Application
 
   def initialize
-    @logger = Jumpkick::Logger.new(@options.logger)
+    @logger = Jumpkick::Logger.new(@options.log)
+    @logger.level = Jumpkick::Logger.const_get(@options.log_level.to_s.upcase)
 
     trap("TERM") do
       @logger.fatal("SIGTERM received; exiting!")
@@ -26,13 +27,6 @@ class Jumpkick::Application
   end
 
   def run
-    # TODO
-    @logger.info("RUN!")
-  end
-
-  def configure
-    # TODO
-    @logger.info("CONFIGURE!")
   end
 
 end
