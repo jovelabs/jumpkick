@@ -26,8 +26,13 @@ class Jumpkick::Application::Boot < Jumpkick::Application
     ui = ::Chef::Knife::UI.new(STDOUT, STDERR, STDIN, bootstrap.config)
     bootstrap.ui = ui
     bootstrap.name_args = [@options.address]
+    bootstrap.config[:ssh_user] = @options.user
     bootstrap.config[:use_sudo] = true
     bootstrap.config[:template_file] = @options.template
+
+    bootstrap.config[:hostname] = @options.hostname
+    bootstrap.config[:amqp_password] = @options.amqp_password
+    bootstrap.config[:admin_password] = @options.admin_password
 
     @logger.info("Running bootstrap for '#{@options.address}'.")
     bootstrap.run

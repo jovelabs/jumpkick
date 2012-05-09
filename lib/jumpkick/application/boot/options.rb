@@ -10,8 +10,12 @@ class Options
     options.log_level = :info
     options.address = nil
     options.template = File.join(File.dirname(__FILE__), "templates", "ubuntu-lucid.erb")
+    options.user = "ubuntu"
+    options.amqp_password = nil
+    options.admin_password = nil
+    options.hostname = nil
 
-    mandatory = [:address, :template]
+    mandatory = [:address, :hostname, :amqp_password, :admin_password]
 
     opts = OptionParser.new do |opts|
       opts.banner = "Usage: boot [options]"
@@ -25,6 +29,22 @@ class Options
 
       opts.on("--template=TEMPLATE", "Bootstrap template") do |template|
         options.template = template
+      end
+
+      opts.on("--user=USER", "Bootstrap user") do |user|
+        options.user = user
+      end
+
+      opts.on("--hostname=HOSTNAME", "URI for the Chef Server") do |hostname|
+        options.hostname = hostname
+      end
+
+      opts.on("--amqp_password=PASSWORD", "Password for chef vhost in RabbitMQ") do |password|
+        options.amqp_password = password
+      end
+
+      opts.on("--admin_password=PASSWORD", "Password for 'admin' user in Chef Server WebUI") do |password|
+        options.admin_password = password
       end
 
 
@@ -45,6 +65,7 @@ class Options
           log
         end
       end
+
 
       opts.separator("")
       opts.separator("General Options:")
