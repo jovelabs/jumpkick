@@ -9,7 +9,7 @@ class Options
     options.log = STDOUT
     options.log_level = :info
     options.address = nil
-    options.template = File.join(File.dirname(__FILE__), "templates", "ubuntu-maverick.erb")
+    options.template = File.join(File.dirname(__FILE__), "templates", "ubuntu-lucid.erb")
 
     mandatory = [:address, :template]
 
