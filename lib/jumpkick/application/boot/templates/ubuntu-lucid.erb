@@ -1,24 +1,43 @@
 bash -c '
-echo "deb http://apt.opscode.com/ `lsb_release -cs`-0.10 main" | sudo tee /etc/apt/sources.list.d/opscode.list
+export DEBIAN_FRONTEND=noninteractive
 
-sudo mkdir -p /etc/apt/trusted.gpg.d
+echo "deb http://apt.opscode.com/ `lsb_release -cs`-0.10 main" | tee /etc/apt/sources.list.d/opscode.list
+mkdir -p /etc/apt/trusted.gpg.d
 gpg --fetch-key http://apt.opscode.com/packages@opscode.com.gpg.key
-gpg --export packages@opscode.com | sudo tee /etc/apt/trusted.gpg.d/opscode-keyring.gpg > /dev/null
+gpg --export packages@opscode.com | tee /etc/apt/trusted.gpg.d/opscode-keyring.gpg > /dev/null
+apt-get -y -q update
+apt-get -y -q -o Dpkg::Options::="--force-confnew" install opscode-keyring
 
-sudo apt-get -y update
-sudo apt-get -y -o Dpkg::Options::="--force-confnew" install opscode-keyring
+apt-get -y -q upgrade
 
-sudo apt-get -y upgrade
-
+apt-get -y -q install debconf-utils
 cat <<EOF | debconf-set-selections
 chef chef/chef_server_url string http://<%= @config[:hostname] %>:4000
 chef-solr chef-solr/amqp_password password <%= @config[:amqp_password] %>
 chef-server-webui chef-server-webui/admin_password password <%= @config[:admin_password] %>
 EOF
-
-sudo apt-get -y install chef chef-server
+apt-get -y -q install chef chef-server
 
 mkdir -p ~/.chef
-sudo cp /etc/chef/validation.pem /etc/chef/webui.pem ~/.chef
-sudo chown -R $USER ~/.chef
+cp /etc/chef/validation.pem /etc/chef/webui.pem ~/.chef
+chown -R $(whoami):$(whoami) ~/.chef
+
+apt-get install -y -q expect
+KNIFE_CONFIG_EXP_FILE="/tmp/knife-config.exp"
+cat <<EOF > ${KNIFE_CONFIG_EXP_FILE}
+#!/usr/bin/expect -f
+set timeout 10
+spawn knife configure -i
+expect "Where should I put the config file?" { send "\n" }
+expect "Please enter the chef server URL" { send "http://127.0.0.1:4000\n" }
+expect "Please enter a clientname for the new client" { send "\n" }
+expect "Please enter the existing admin clientname" { send "\n" }
+expect "Please enter the location of the existing admin client" { send "${HOME}/.chef/webui.pem\n" }
+expect "Please enter the validation clientname" { send "\n" }
+expect "Please enter the location of the validation key" { send "${HOME}/.chef/validation.pem\n" }
+expect "Please enter the path to a chef repository" { send "${HOME}/chef_repo\n" }
+interact
+EOF
+chmod +x ${KNIFE_CONFIG_EXP_FILE}
+${KNIFE_CONFIG_EXP_FILE}
 '
