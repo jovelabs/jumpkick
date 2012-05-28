@@ -10,6 +10,8 @@ require "net/ssh/multi"
 
 class Jumpkick::Application::Boot < Jumpkick::Application
 
+  COOKBOOK_PATH
+
   def initialize
     @options = Options.parse(ARGV)
 
@@ -18,6 +20,19 @@ class Jumpkick::Application::Boot < Jumpkick::Application
 
   def run
     super
+
+    bootstrap
+  end
+
+  private
+
+  def upload_cookbook
+  end
+
+  def upload_role
+  end
+
+  def bootstrap
     @logger.debug(@options)
     @logger.info("Preparing bootstrap for '#{@options.address}'.")
 
