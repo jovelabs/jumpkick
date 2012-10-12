@@ -1,6 +1,6 @@
 # Jumpkick
 
-This is the demandchain provisioning automation gem.  The name comes from a play on Sun's Jumpstart and RedHat's Kickstart automated provisioning and installation systems.
+This gem provides an easy way to bootstrap software onto an existing system via an SSH connection using ERB templates.  The name comes from a play on Sun's Jumpstart and RedHat's Kickstart automated provisioning and installation systems.
 
 ## Installation
 

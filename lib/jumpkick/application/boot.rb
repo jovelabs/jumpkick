@@ -10,8 +10,6 @@ require "net/ssh/multi"
 
 class Jumpkick::Application::Boot < Jumpkick::Application
 
-  COOKBOOK_PATH
-
   def initialize
     @options = Options.parse(ARGV)
 
